@@ -1,0 +1,7 @@
+G:\Учеба\GameDev\Курс Разработчик Unity3d Netologia\Итоговая работа по C#\Итоговая работа по программированию\FinalTask\FinalTask\bin\Debug\FinalTask.exe.config
+G:\Учеба\GameDev\Курс Разработчик Unity3d Netologia\Итоговая работа по C#\Итоговая работа по программированию\FinalTask\FinalTask\bin\Debug\FinalTask.exe
+G:\Учеба\GameDev\Курс Разработчик Unity3d Netologia\Итоговая работа по C#\Итоговая работа по программированию\FinalTask\FinalTask\bin\Debug\FinalTask.pdb
+G:\Учеба\GameDev\Курс Разработчик Unity3d Netologia\Итоговая работа по C#\Итоговая работа по программированию\FinalTask\FinalTask\obj\Debug\FinalTask.csproj.AssemblyReference.cache
+G:\Учеба\GameDev\Курс Разработчик Unity3d Netologia\Итоговая работа по C#\Итоговая работа по программированию\FinalTask\FinalTask\obj\Debug\FinalTask.csproj.CoreCompileInputs.cache
+G:\Учеба\GameDev\Курс Разработчик Unity3d Netologia\Итоговая работа по C#\Итоговая работа по программированию\FinalTask\FinalTask\obj\Debug\FinalTask.exe
+G:\Учеба\GameDev\Курс Разработчик Unity3d Netologia\Итоговая работа по C#\Итоговая работа по программированию\FinalTask\FinalTask\obj\Debug\FinalTask.pdb
