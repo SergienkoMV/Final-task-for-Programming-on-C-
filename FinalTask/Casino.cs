@@ -3,46 +3,56 @@ using System.Collections.Generic;
 using System.IO;
 using FinalTask.Game;
 using FinalTask.FileSystem;
+using FinalTask.Game.Games;
 
 namespace FinalTask
 {
     class Casino : IGame
     {
         public const string StartBank = "1000";
+        public int MaxBank = 10000;
         private string _player;
-        private int _money = 1000;
-        private Dictionary<string, int> _profile;
+        private int _money = 0;
+        //private Dictionary<string, int> _profile;
         private int _gameNumber;
         private bool correctInput;
         private string _path = "G:\\Учеба\\GameDev\\Курс Разработчик Unity3d Netologia\\Итоговая работа по C#\\Итоговая работа по программированию\\FinalTask\\Profiles\\";
+        private BlackJeck blackJeck;
+        private Dice dice;
 
-        public void EnterToTheCasino()
+        public Casino()
         {
-            //Узнаем имя для профиля.
+            blackJeck = new BlackJeck();
+            dice = new Dice();
+        }
+
+        public void StartGame()
+        {
+            //1. Приветствие игрока
             MeetWithPlayer();
 
             //Создаем экземпляр для работы с файлами
             var fileManager = new FileSystemSaveLoadService(_path);
 
-            //Считываем данные профиля из файла
-            if(int.TryParse(fileManager.LoadData(_player), out int money))
+            //2. Загрузка профиля игрока. Если профиля нет - создать. Предложить игроку ввести имя.
+            if (int.TryParse(fileManager.LoadData(_player), out int money))
             {
                 Console.WriteLine("Your bank is: " + money);
                 _money = money;
-            }
-            //LoadProfile(_player);
-
-            _profile = new Dictionary<string, int>();
-            //считать профиль из сохраненных
-
-            if (!_profile.ContainsKey(_player)) //_profile.TryGetValue(_player, out int value))
+            } 
+            else
             {
-                _profile = new Dictionary<string, int>();
-                _profile.Add(_player, _money);
+                throw new Exception("We have a tecknical problem and we haven't accecc to your bank");
             }
 
+            //3. Выбор игры
             ChooseTheGame();
 
+            //6.Прощаемся с игроком.
+            Console.WriteLine("Goodbye, {0}", _player);
+            //7.Сохраняем профиль.
+            fileManager.SaveData(_money.ToString(), _player);
+            //8.Выход из игры.
             Console.ReadLine(); //Остановка, чтобы сразу не вылететь из программы. 
         }
 
@@ -59,22 +69,17 @@ namespace FinalTask
 
         //если методы создаются только для того, чтобы структурировать программу и сделать более читаемой, нет же смысла передавать в методы и возвращать переменные, которые используются внутри данного класса?
 
-        private void /*Dictionary<string, int>*/ LoadProfile(string nmae)
-        {
-            //return _profile;
-            _profile.TryGetValue(_player, out int value);
-            Console.WriteLine("Your bank is: " + _profile[_player] /*value*/);
-        }
+        //private void /*Dictionary<string, int>*/ LoadProfile(string nmae)
+        //{
+        //    //return _profile;
+        //    _profile.TryGetValue(_player, out int value);
+        //    Console.WriteLine("Your bank is: " + _profile[_player] /*value*/);
+        //}
 
         private void ChooseTheGame()
         {
             do
             {
-                if (!CheckMoney())
-                {
-                    break;
-                }
-
                 do
                 {
                     Console.WriteLine("Please, choose the game:");
@@ -88,38 +93,51 @@ namespace FinalTask
                     } 
                     else
                     {
-                        if (_gameNumber == 1 || _gameNumber == 2 || _gameNumber == 0)
+                        correctInput = true;
+                        switch (_gameNumber)
                         {
-                            Console.WriteLine("1, 2 or 0"); //удалить. Проверка что вызывается код
-                            correctInput = true;
-                            continue;
-                        }
-                        else
-                        {
-                            Console.WriteLine("There are not this game in our casino.");
-                            correctInput = false;
-                        }
+                            case 1:
+                                if (!CheckMoney())
+                                {
+                                    break;
+                                }
+                                blackJeck.PlayGame();
+                                break;
+                            case 2:
+                                if (!CheckMoney())
+                                {
+                                    break;
+                                }
+                                dice.PlayGame();
+                                break;
+                            case 0:
+
+                                break;
+                            default:
+                                Console.WriteLine("There are not this game in our casino.");
+                                correctInput = false;
+                                break;
+                        } 
+
                     }
 
                 } while (!correctInput);
 
-
-                //switch 
-
-                //case
-                //{
-
-                //}
             }
-            while (_gameNumber != 0);
+            while (_gameNumber != 0 && _money > 0);
         }
 
         private bool CheckMoney()
         {
-            if (_profile[_player] <= 0)
+            if (_money <= 0)
             {
                 Console.WriteLine("No money? Kicked");
                 return false;
+            } 
+            else if (_money > MaxBank)
+            {
+                Console.WriteLine("You wasted half of your bank money in casino’s bar");
+                _money = _money / 2;
             }
             return true;
         }

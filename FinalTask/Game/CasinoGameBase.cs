@@ -29,5 +29,7 @@ namespace FinalTask.Game
         }
 
         protected abstract void FactoryMethod();
+
+
     }
 }

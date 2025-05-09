@@ -10,7 +10,7 @@ namespace FinalTask
     {
         static void Main(string[] args)
         {
-            new Casino().EnterToTheCasino();
+            new Casino().StartGame();
         }
     }
 }

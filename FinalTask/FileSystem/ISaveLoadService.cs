@@ -9,6 +9,6 @@ namespace FinalTask.FileSystem
     interface ISaveLoadService<T>
     {
         void SaveData(T param1, string path);
-        string LoadData(string path); //переделать выходной параметра на generic
+        string LoadData(string path); //переделать выходной параметра на generic в соответствии с заданием
     }
 }

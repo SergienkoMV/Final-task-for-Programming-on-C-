@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FinalTask.FileSystem
 {
@@ -26,10 +23,10 @@ namespace FinalTask.FileSystem
             }
         }
 
-        public string LoadData(string _player)
+        public string LoadData(string fileName)
         {
             
-            var file = GeneratePath(_player);
+            var file = GeneratePath(fileName);
 
             if (File.Exists(file))
             {
@@ -41,10 +38,9 @@ namespace FinalTask.FileSystem
             else
             {
                 var bank = FinalTask.Casino.StartBank;
-                SaveData(bank, _player);
+                SaveData(bank, fileName);
                 return bank;
             }
-
 
             //return default(string);
         }
