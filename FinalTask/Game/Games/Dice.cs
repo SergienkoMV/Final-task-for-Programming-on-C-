@@ -4,9 +4,9 @@ namespace FinalTask.Game.Games
 {
     class Dice : CasinoGameBase
     {
-        Dice()
+        Dice(int _quantity) : base(_quantity)
         {
-            FactoryMethod();
+            FactoryMethod(_quantity);
         }
 
         public override void PlayGame()
@@ -14,9 +14,19 @@ namespace FinalTask.Game.Games
             Console.WriteLine("Dice");
         }
 
-        protected override void FactoryMethod()
+        public override void ResultOutpu()
         {
             throw new NotImplementedException();
         }
+
+        protected override void FactoryMethod(int _dicesQuantity)
+        {
+            throw new NotImplementedException();
+        }
+
+        //protected override void FactoryMethod(int _quantity)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

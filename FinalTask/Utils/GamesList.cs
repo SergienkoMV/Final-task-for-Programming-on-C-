@@ -2,7 +2,7 @@
 {
     public enum GamesList
     {
-        Exit = 1,
+        Exit = 0,
         BlackJeck,
         Dice
     }

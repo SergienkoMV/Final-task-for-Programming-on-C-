@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using FinalTask.Utils;
 
 namespace FinalTask.FileSystem
 {
@@ -37,7 +38,7 @@ namespace FinalTask.FileSystem
             }
             else
             {
-                var bank = FinalTask.Casino.StartBank;
+                var bank = GameConstants.StartBank;
                 SaveData(bank, fileName);
                 return bank;
             }

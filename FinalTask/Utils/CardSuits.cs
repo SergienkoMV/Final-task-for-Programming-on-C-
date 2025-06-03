@@ -2,9 +2,9 @@
 {
     enum CardSuits
     {
-        Diamonds, 
-        Hearts,
-        Spades,
-        Clubs
+        Diamonds = 0, 
+        Hearts = 1,
+        Spades = 2,
+        Clubs = 3
     }
 }

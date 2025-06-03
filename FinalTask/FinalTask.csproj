@@ -55,6 +55,7 @@
     <Compile Include="Utils\Card.cs" />
     <Compile Include="Utils\CardSuits.cs" />
     <Compile Include="Utils\CardValues.cs" />
+    <Compile Include="Utils\GameConstants.cs" />
     <Compile Include="Utils\GamesList.cs" />
   </ItemGroup>
   <ItemGroup>

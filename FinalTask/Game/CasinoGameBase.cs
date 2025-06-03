@@ -1,4 +1,5 @@
 ﻿using System;
+using FinalTask;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,13 @@ namespace FinalTask.Game
 {
     abstract class CasinoGameBase
     {
-        public CasinoGameBase()
+        //protected int _bet;
+        //protected int _bank;
+        //protected int _quantity;
+
+        public CasinoGameBase(int _quantity)
         {
-            FactoryMethod();
+            FactoryMethod(_quantity);
         }
 
         public abstract void PlayGame();
@@ -28,8 +33,10 @@ namespace FinalTask.Game
             //вызывает событие OnDraw (создеть в этом классе)
         }
 
-        protected abstract void FactoryMethod();
+        protected abstract void FactoryMethod(int _quantity);
 
 
+
+        public abstract void ResultOutpu();
     }
 }
