@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using FinalTask.Utils;
 
@@ -35,30 +34,28 @@ namespace FinalTask.FileSystem
 
         }
 
-        public string LoadData(string fileName)
-        {
-            
-            var file = GeneratePath(fileName);
-
-            if (File.Exists(file))
-            {
-                using (var readStream = File.OpenText(file))
-                {
-                    return readStream.ReadToEnd();
-                }
-            }
-            else
-            {
-                var bank = GameConstants.StartBank;
-                SaveData(bank, fileName);
-                return bank;
-            }
-        }
-
         private string GeneratePath(string fileName)
         {
             var path = _path + fileName + ".txt";
             return path;
+        }
+
+        public Y LoadData<Y>(string fileName)
+        {
+            var file = GeneratePath(fileName);
+
+            if (!File.Exists(file))
+            {
+                var bank = GameConstants.StartBank;
+                SaveData(bank, fileName);
+            }
+
+            using (var readStream = File.OpenText(file))
+            {
+                string content = readStream.ReadToEnd();
+                return (Y)Convert.ChangeType(content, typeof(Y));
+            }
+
         }
     }
 }

@@ -9,31 +9,16 @@ namespace FinalTask.Game.Games
         public event Action OnWin;
         public event Action OnLoose;
         public event Action OnDraw;
-
-
-        List<Card> deckList = new List<Card>(); //Карты сохраняются в список
-        List<Card> copyDeck = new List<Card>();
-        Stack<Card> deck = new Stack<Card>(); //3.	Приватное поле типа Queue<Card> с названием Deck.
-        Queue<Card> playerHand = new Queue<Card>();
-        Queue<Card> casinoHand = new Queue<Card>();
+        
         int playerScore = 0;
         int casinoScore = 0;
 
-        //public void OutResult(int param1)
-        //{
-        //    if (OnWin != null)
-        //    {
-        //        Console.WriteLine(OnWin.Invoke(param1));
-        //    }
-        //    else if(OnLoose != null)
-        //    {
-        //        Console.WriteLine(OnLoose.Invoke(param1));
-        //    }
-        //    else if (OnDraw != null)
-        //    {
-        //        Console.WriteLine(OnDraw.Invoke(param1));
-        //    }
-        //}
+        private Stack<Card> _deck = new Stack<Card>();
+        List<Card> deckList = new List<Card>();
+        List<Card> copyDeck = new List<Card>();
+        Queue<Card> playerHand = new Queue<Card>();
+        Queue<Card> casinoHand = new Queue<Card>();
+
 
         public BlackJeck(int[] values) : base(values)
         {
@@ -47,14 +32,10 @@ namespace FinalTask.Game.Games
             Shuffle();
             Console.WriteLine("Take cards please.");
 
-            //Получаем значение по случайному индексу и удаляем его из списка, далее по данному значению берем карту из колоды и добавляем ее в игровую колоду.
-            //Таким образом получаем перемешанную колоду.
-
-            //5.	Реализация механики должна быть максимально простой: сначала выдаётся две карты пользователя, затем две карты компьютера
-            playerHand.Enqueue(deck.Pop());
-            playerHand.Enqueue(deck.Pop());
-            casinoHand.Enqueue(deck.Pop());
-            casinoHand.Enqueue(deck.Pop());
+            playerHand.Enqueue(_deck.Pop());
+            playerHand.Enqueue(_deck.Pop());
+            casinoHand.Enqueue(_deck.Pop());
+            casinoHand.Enqueue(_deck.Pop());
 
             Console.WriteLine("Player's cards:");
             foreach (Card card in playerHand)
@@ -71,8 +52,6 @@ namespace FinalTask.Game.Games
 
         protected override void FactoryMethod(int[] cardsQuantity)
         {
-            //2.	Реализация FactoryMethod. Процесс создания карт - на усмотрение разработчика. Карты сохраняются в список.
-            //int count = 0;
             for (int i = 0; i < Enum.GetNames(typeof(CardSuits)).Length; i++)
             {
                 for (int j = 0; j < Enum.GetNames(typeof(CardValues)).Length; j++)
@@ -87,24 +66,11 @@ namespace FinalTask.Game.Games
                     }
                 }
             }
-            
-            for(int i = 0; i < deckList.Count; i++)
-            {
-                Console.WriteLine(deckList[i].Suit + " " +  deckList[i].Value);
-            }
         }
 
-        //public override void MakeBet()
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //4.	Приватный метод Shuffle. Перетасовывает карты в случайном порядке и добавляет их в очередь.
         private void Shuffle()
         {
             Random rundom = new Random();
-            //Создадим список с числами от 1 до _quantity
-            //copyDeck = deckList;
             foreach(Card card in deckList)
             {
                 copyDeck.Add(card);
@@ -113,19 +79,17 @@ namespace FinalTask.Game.Games
             for (int i = 0; i < deckList.Count; i++)
             {
                 int value = rundom.Next(0, copyDeck.Count);
-                deck.Push(copyDeck[value]);
+                _deck.Push(copyDeck[value]);
                 copyDeck.Remove(copyDeck[value]);
             }
         }
 
-        //6.	Должна быть реализация вывода результатов игры в консоль.
         public override void ResultOutpu()
         {
             int summ = 0;
             playerScore = 0;
             casinoScore = 0;
 
-            //Подсчёт очков - такой же, как в классическом блэкджеке.
             do
             {
                 while (playerHand.Count > 0)
@@ -141,7 +105,6 @@ namespace FinalTask.Game.Games
                     casinoScore += (int)card.Value;
                 }
                 Console.WriteLine("Casino's score: {0}", casinoScore);
-            
 
                 if (playerScore <= 21 && (casinoScore > 21 || playerScore > casinoScore))
                 {
@@ -158,11 +121,11 @@ namespace FinalTask.Game.Games
                     OnDrawInvoke();
                     break;
                 }
-                else //a.	Количество очков одинаковое и меньше 21 - ещё по одной карте
+                else
                 {
                     Console.WriteLine("Extra cards:");
-                    playerHand.Enqueue(deck.Pop());
-                    casinoHand.Enqueue(deck.Pop());
+                    playerHand.Enqueue(_deck.Pop());
+                    casinoHand.Enqueue(_deck.Pop());
                 }
             } while (true);
         }

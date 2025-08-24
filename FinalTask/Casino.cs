@@ -8,8 +8,6 @@ using FinalTask.Utils;
 
 namespace FinalTask
 {
-    //public delegate void Result();
-
     class Casino : IGame
     {
         private string _player;
@@ -32,14 +30,11 @@ namespace FinalTask
 
         public void StartGame()
         {
-            //1. Приветствие игрока
             MeetWithPlayer();
 
-            //Создаем экземпляр для работы с файлами
             var fileManager = new FileSystemSaveLoadService(_path);
 
-            //2. Загрузка профиля игрока. Если профиля нет - создать. Предложить игроку ввести имя.
-            if (int.TryParse(fileManager.LoadData(_player), out int money))
+            if (int.TryParse(fileManager.LoadData<string>(_player), out int money))
             {
                 Console.WriteLine("Your bank is: " + money + "$");
                 _playerMoney = money;
@@ -49,12 +44,11 @@ namespace FinalTask
                 throw new Exception("We have a tecknical problem and we haven't accecc to your bank");
             }
 
-            //3. Выбор игры
             do
             {
+                _gameNumber = ChooseTheGame();
                 if (CheckMoney())
                 {
-                    _gameNumber = ChooseTheGame();
                     if (_gameNumber != 0)
                     {
                         _bank = MakeBet();
@@ -62,22 +56,21 @@ namespace FinalTask
                         currentGame.OnWin += OnWinOutput;
                         currentGame.OnLoose += OnLooseOutput;
                         currentGame.OnDraw += OnDrawOutput;
-                        //5.Далее выводится результат игры: значение карт либо костей(в зависимости от выбранной игры), победа / поражение или ничья.
                         currentGame.ResultOutpu();
-                        Console.WriteLine("You have {0}$", _playerMoney);
                         currentGame.OnWin -= OnWinOutput;
                         currentGame.OnLoose -= OnLooseOutput;
                         currentGame.OnDraw -= OnDrawOutput;
                     }
                 }
-            } while (_gameNumber != 0 && _playerMoney > 0);
+                else
+                {
+                    break;
+                }
+            } while (_gameNumber != 0);
 
-                //6.Прощаемся с игроком.
-                Console.WriteLine("Goodbye, {0}", _player);
-            //7.Сохраняем профиль.
+            Console.WriteLine("Goodbye, {0}", _player);
             fileManager.SaveData(_playerMoney.ToString(), _player);
-            //8.Выход из игры.
-            Console.ReadLine(); //Остановка, чтобы сразу не вылететь из программы. 
+            Console.ReadLine();
         }
 
         private void MeetWithPlayer()
@@ -85,13 +78,8 @@ namespace FinalTask
             Console.WriteLine("Welcome to the our Casino!");
             Console.WriteLine("What is your name?");
             _player = Console.ReadLine();
-
-            //CheckProfile(_player);
-            //_profile.TryGetValue(_player, out int value);
             Console.WriteLine("Nice to meet you: " + _player);
         }
-
-        //если методы создаются только для того, чтобы структурировать программу и сделать более читаемой, нет же смысла передавать в методы и возвращать переменные, которые используются внутри данного класса?
 
         private int ChooseTheGame()
         {
@@ -150,11 +138,7 @@ namespace FinalTask
                     }
                     else
                     {
-                        //4.После выбора игры предлагается сделать ставку.
-                        //Ставка не должна превышать значение банка игрока.
-                        //Значение ставки компьютера равняется ставке игрока. 
                         bank = playerBet * 2;
-                        //Объявляем сумму банка
                         Console.WriteLine("Player's bet is {0}$. Casino's bet is {0}$. There is {1}$ in the bank", playerBet, bank);
                         correctInput = true;
                     }
@@ -172,6 +156,7 @@ namespace FinalTask
         {
             if (_playerMoney <= 0)
             {
+                Console.WriteLine("You have {0}$", _playerMoney);
                 Console.WriteLine("No money? Kicked");
                 return false;
             } 
@@ -179,7 +164,13 @@ namespace FinalTask
             {
                 Console.WriteLine("You wasted half of your bank money in casino’s bar");
                 _playerMoney = _playerMoney / 2;
+                Console.WriteLine("You have {0}$", _playerMoney);
             }
+            else
+            {
+                Console.WriteLine("You have {0}$", _playerMoney);
+            }
+
             return true;
         }
 
@@ -196,6 +187,7 @@ namespace FinalTask
             Console.WriteLine(" *** Player loose bet: {0}$ ***", _bank / 2);
             _playerMoney -= _bank / 2;
         }
+
         public void OnDrawOutput()
         {
             Console.WriteLine(" *** No winner ***");

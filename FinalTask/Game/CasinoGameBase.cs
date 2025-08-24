@@ -1,15 +1,7 @@
 ﻿using System;
-using FinalTask;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FinalTask.Game
 {
-    //должно ли это быть здесь / только здесь?
-    
-
     abstract class CasinoGameBase
     {
         public event Action OnWin;

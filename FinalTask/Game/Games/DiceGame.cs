@@ -9,17 +9,13 @@ namespace FinalTask.Game.Games
         private int _minValue;
         public int MaxValue => _maxValue;
         public int MinValue => _minValue;
-        //public int _dicesQuantity;
         Dice[] dices;
         int[] PlayerResult;
         int[] CasinoResult;
 
         public DiceGame(int[] values) : base(values)
         {
-            //this.FactoryMethod(quantity);
-            _maxValue = values[1];
-            _minValue = values[2];
-            
+
         }
 
         protected override void FactoryMethod(int[] values)
@@ -86,7 +82,5 @@ namespace FinalTask.Game.Games
                 OnDrawInvoke();
             }
         }
-
-
     }
 }

@@ -26,12 +26,14 @@ namespace FinalTask.Utils
 
         }
 
+        //public readonly string Suit => _suit; //readonly недоступно для C# 7.3, требуется версия не ниже 8.0
         public int Number
         {
             get 
             {
                 Random random = new Random();
-                return random.Next(_min, _max + 1);
+                var value = random.Next(_min, _max + 1);
+                return value;
             }
         }
     }
