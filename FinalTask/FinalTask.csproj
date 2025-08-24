@@ -58,6 +58,7 @@
     <Compile Include="Utils\Dice.cs" />
     <Compile Include="Utils\GameConstants.cs" />
     <Compile Include="Utils\GamesList.cs" />
+    <Compile Include="Utils\WrongDiceNumberException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

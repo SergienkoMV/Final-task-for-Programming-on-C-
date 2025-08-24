@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace FinalTask.Game
 {
     //должно ли это быть здесь / только здесь?
-    public delegate void Result(int sum);
+    
 
     abstract class CasinoGameBase
     {
@@ -20,37 +20,27 @@ namespace FinalTask.Game
         public event Result OnLoose;
         public event Result OnDraw;
 
-        public CasinoGameBase(int[] values)
+        public CasinoGameBase(int _quantity)
         {
-            FactoryMethod(values);
+            FactoryMethod(_quantity);
         }
 
         public abstract void PlayGame();
 
-        protected void OnWinInvoke(int param) 
-        {
-            if (OnWin != null)
-            {
-                OnWin.Invoke(param);
-            } 
-        }
-        protected virtual void OnLooseInvoke(int param)
-        {
-            if (OnLoose != null)
-            {
-                OnLoose.Invoke(param);
-            }
-        }
-        protected virtual void OnDrawInvoke(int param)
+        protected virtual void OnWinInvoke() => OnWin?.Invoke();
+
+        protected virtual void OnLooseInvoke() => OnLoose?.Invoke();
+
+        protected virtual void OnDrawInvoke()
         {
             if (OnDraw != null)
             {
-                OnDraw.Invoke(param);
+                OnDraw.Invoke();
             }
         }
 
-        protected abstract void FactoryMethod(int[] values);
+        protected abstract void FactoryMethod(int _quantity);
 
-        public abstract int ResultOutpu(int bank);
+        public abstract void ResultOutpu();
     }
 }

@@ -8,6 +8,9 @@ using FinalTask.Utils;
 
 namespace FinalTask
 {
+    public delegate void Result();
+    //public delegate int Result(int sum);
+
     class Casino : IGame
     {
         public int MaxBank = 10000;
@@ -25,10 +28,8 @@ namespace FinalTask
 
         public Casino()
         {
-            int[] blackJeckParams = new int[] { 54 };
-            _blackJeck = new BlackJeck(blackJeckParams);
-            int[] diceParams = new int[] { 5, 1, 6 };
-            _dice = new DiceGame(diceParams);
+            _blackJeck = new BlackJeck(54);
+            _dice = new DiceGame(5, 1, 6);
         }
 
         public void StartGame()
@@ -60,8 +61,25 @@ namespace FinalTask
                     {
                         _bank = MakeBet();
                         currentGame.PlayGame();
+                        currentGame.OnWin += () =>
+                        {
+                            Console.WriteLine(" *** Player win ***");
+                            Console.WriteLine(" *** Player get bank: {0}$ ***", _bank);
+                            _playerMoney += _bank / 2;
+                        };
+                        currentGame.OnLoose += () =>
+                        {
+                            Console.WriteLine(" *** Casino win ***");
+                            Console.WriteLine(" *** Player loose bet: {0}$ ***", _bank / 2);
+                            _playerMoney -= _bank / 2;
+                        };
+                        currentGame.OnDraw += () =>
+                        {
+                            Console.WriteLine(" *** No winner ***");
+                            Console.WriteLine(" *** Player return bet: {0}$ ***", _bank / 2);
+                        };
                         //5.Далее выводится результат игры: значение карт либо костей(в зависимости от выбранной игры), победа / поражение или ничья.
-                        _playerMoney += currentGame.ResultOutpu(_bank);
+                        currentGame.ResultOutpu();
                         Console.WriteLine("You have {0}$", _playerMoney);
                     }
                 }

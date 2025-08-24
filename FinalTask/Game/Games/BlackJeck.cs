@@ -4,9 +4,9 @@ using FinalTask.Utils;
 
 namespace FinalTask.Game.Games
 {
-    public delegate int Result(int sum);
-    public delegate int OnLoose(int sum);
-    public delegate int OnDraw(int sum);
+    //public delegate int Result(int sum);
+    //public delegate int OnLoose(int sum);
+    //public delegate int OnDraw(int sum);
 
     class BlackJeck : CasinoGameBase
     {
@@ -40,7 +40,7 @@ namespace FinalTask.Game.Games
         //    }
         //}
 
-        public BlackJeck(int[] values) : base(values)
+        public BlackJeck(int _quantity) : base(_quantity)
         {
             //FactoryMethod(_quantity); //уже вызывается в наследуемом классе через base.
         }
@@ -104,7 +104,7 @@ namespace FinalTask.Game.Games
         //    Console.WriteLine(" *** There is no winner ***");
         //}
 
-        protected override void FactoryMethod(int[] cardsQuantity)
+        protected override void FactoryMethod(int cardsQuantity)
         {
             //2.	Реализация FactoryMethod. Процесс создания карт - на усмотрение разработчика. Карты сохраняются в список.
             //int count = 0;
@@ -116,7 +116,7 @@ namespace FinalTask.Game.Games
                     var jValue = (CardValues)Enum.GetValues(typeof(CardValues)).GetValue(j);
 
                     deckList.Add(new Card(iSuit, jValue));                    
-                    if (deckList.Count > cardsQuantity[0])
+                    if (deckList.Count > cardsQuantity)
                     {
                         break;
                     }
@@ -154,7 +154,7 @@ namespace FinalTask.Game.Games
         }
 
         //6.	Должна быть реализация вывода результатов игры в консоль.
-        public override int ResultOutpu(int bank)
+        public override void ResultOutpu()
         {
             int summ = 0;
             playerScore = 0;
@@ -180,20 +180,24 @@ namespace FinalTask.Game.Games
 
                 if (playerScore <= 21 && (casinoScore > 21 || playerScore > casinoScore))
                 {
-                    base.OnWin += PlayerWin;
-                    summ = bank/2;
+                    OnWinInvoke();
+
+                    //base.OnWin += PlayerWin;
+                    //summ = bank/2;
                     break;
                 }
                 else if (casinoScore <= 21 && (playerScore > 21 || playerScore < casinoScore))
                 {
-                    base.OnLoose += CasinoWin;
-                    summ = -bank/2;
+                    OnLooseInvoke();
+                    //base.OnLoose += CasinoWin;
+                    //summ = -bank/2;
                     break;
                 }
                 else if ((playerScore >= 21 && casinoScore >= 21) /*|| ((playerScore == casinoScore) && playerScore > 15)*/)
                 {
-                    base.OnDraw += NoWinner;
-                    summ = 0;
+                    OnDrawInvoke();
+                    //base.OnDraw += NoWinner;
+                    //summ = 0;
                     break;
                 }
                 else //a.	Количество очков одинаковое и меньше 21 - ещё по одной карте
@@ -203,13 +207,13 @@ namespace FinalTask.Game.Games
                     casinoHand.Enqueue(deck.Pop());
                 }
             } while (true);
-            OnWinInvoke(bank);
-            OnLooseInvoke(bank);
-            OnDrawInvoke(bank);
-            base.OnWin -= PlayerWin;
-            base.OnLoose -= CasinoWin;
-            base.OnDraw -= NoWinner;
-            return summ;
+
+
+            //base.OnWin -= PlayerWin;
+            //base.OnLoose -= CasinoWin;
+            //base.OnDraw -= NoWinner;
+
+            //return summ;
 
             //else if(playerScore == 21)
             //{
@@ -226,20 +230,23 @@ namespace FinalTask.Game.Games
             //throw new NotImplementedException();
         }
         //сделать нормальный вовд результата по событию
-        public static void PlayerWin(int param)
-        {
-            Console.WriteLine(" *** Player win ***");
-            Console.WriteLine(" *** Player get bank: {0}$ ***", param);
-        }
-        public static void CasinoWin(int param)
-        {
-            Console.WriteLine(" *** Casino win ***");
-            Console.WriteLine(" *** Player loose bet: {0}$ ***", param/2);
-        }
-        public static void NoWinner(int param)
-        {
-            Console.WriteLine(" *** No winner ***");
-            Console.WriteLine(" *** Player return bet: {0}$ ***", param / 2);
-        }
+
+
+
+        //public void PlayerWin(int param)
+        //{
+        //    Console.WriteLine(" *** Player win ***");
+        //    Console.WriteLine(" *** Player get bank: {0}$ ***", param);
+        //}
+        //public static void CasinoWin(int param)
+        //{
+        //    Console.WriteLine(" *** Casino win ***");
+        //    Console.WriteLine(" *** Player loose bet: {0}$ ***", param/2);
+        //}
+        //public static void NoWinner(int param)
+        //{
+        //    Console.WriteLine(" *** No winner ***");
+        //    Console.WriteLine(" *** Player return bet: {0}$ ***", param / 2);
+        //}
     }
 }

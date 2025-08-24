@@ -12,11 +12,11 @@ namespace FinalTask.Game.Games
         //public int _dicesQuantity;
         Dice[] dices;
 
-        public DiceGame(int[] values) : base(values)
+        public DiceGame(int quantity, int minValue, int maxValue) : base(quantity)
         {
             //FactoryMethod(quantity);
-            _maxValue = values[1];
-            _minValue = values[2];
+            _maxValue = minValue;
+            _minValue = maxValue;
             
         }
 
@@ -29,17 +29,17 @@ namespace FinalTask.Game.Games
             }
         }
 
-        public override int ResultOutpu(int bank)
+        public override void ResultOutpu()
         {
             throw new NotImplementedException();
         }
 
-        protected override void FactoryMethod(int[] values)
+        protected override void FactoryMethod(int _dicesQuantity)
         {
-            Dice[] dices = new Dice[values[0]];
-            for (int i = 0; i < dices.Length; i++)
+            Dice[] dices = new Dice[_dicesQuantity];
+            for (int i = 0; i < _dicesQuantity; i++)
             {
-                dices[i] = new Dice(values[1], values[2]);
+                dices[i] = new Dice(MinValue, MaxValue);
             }
         }
 

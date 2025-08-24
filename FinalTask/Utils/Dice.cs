@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FinalTask.Utils;
 
 namespace FinalTask.Utils
 {
@@ -13,8 +14,16 @@ namespace FinalTask.Utils
 
         public Dice(int min, int max)
         {
-            _min = min;
-            _max = max;
+            if (_min < 1 || _min > _max)
+            {
+                //throw new WrongDiceNumberException();
+            } 
+            else
+            {
+                _min = min;
+                _max = max;
+            }
+
         }
 
         public int Number
