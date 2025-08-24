@@ -4,15 +4,11 @@ using FinalTask.Utils;
 
 namespace FinalTask.Game.Games
 {
-    //public delegate int Result(int sum);
-    //public delegate int OnLoose(int sum);
-    //public delegate int OnDraw(int sum);
-
     class BlackJeck : CasinoGameBase
     {
-        public event Result OnWin;
-        public event Result OnLoose;
-        public event Result OnDraw;
+        public event Action OnWin;
+        public event Action OnLoose;
+        public event Action OnDraw;
 
 
         List<Card> deckList = new List<Card>(); //Карты сохраняются в список
@@ -20,7 +16,6 @@ namespace FinalTask.Game.Games
         Stack<Card> deck = new Stack<Card>(); //3.	Приватное поле типа Queue<Card> с названием Deck.
         Queue<Card> playerHand = new Queue<Card>();
         Queue<Card> casinoHand = new Queue<Card>();
-        //private Queue<Card> _deck; //по ТЗ должно быть Deck, но в соответствии с нотацией, должно быть _deck, так как поле приватное.
         int playerScore = 0;
         int casinoScore = 0;
 
@@ -40,9 +35,9 @@ namespace FinalTask.Game.Games
         //    }
         //}
 
-        public BlackJeck(int _quantity) : base(_quantity)
+        public BlackJeck(int[] values) : base(values)
         {
-            //FactoryMethod(_quantity); //уже вызывается в наследуемом классе через base.
+
         }
 
         public override void PlayGame()
@@ -72,39 +67,9 @@ namespace FinalTask.Game.Games
             {
                 Console.WriteLine(" * {0} {1}", card.Suit, card.Value);
             }
-
-            //Сравниваем результат
-            //Объявляем победителя
-            //ResultOutpu();
-
-            //while (OnWin == null && OnLoose == null && OnDraw == null)
-            //{
-            //    playerHand.Enqueue(gameDeck.Pop());
-            //    casinoHand.Enqueue(gameDeck.Pop());
-
-            //}
-            //Если игрок победил добавляем сумму из банка
-
         }
 
-        //protected override void OnWinInvoke(int param)
-        //{
-        //    Console.WriteLine(" *** Player win ***");
-        //    if (OnWin)
-        //    OutResult(param);
-        //}
-
-        //protected override void OnLooseInvoke(int param)
-        //{
-        //    Console.WriteLine(" *** Casino win ***");
-        //}
-
-        //protected override void OnDrawInvoke(int param)
-        //{
-        //    Console.WriteLine(" *** There is no winner ***");
-        //}
-
-        protected override void FactoryMethod(int cardsQuantity)
+        protected override void FactoryMethod(int[] cardsQuantity)
         {
             //2.	Реализация FactoryMethod. Процесс создания карт - на усмотрение разработчика. Карты сохраняются в список.
             //int count = 0;
@@ -116,7 +81,7 @@ namespace FinalTask.Game.Games
                     var jValue = (CardValues)Enum.GetValues(typeof(CardValues)).GetValue(j);
 
                     deckList.Add(new Card(iSuit, jValue));                    
-                    if (deckList.Count > cardsQuantity)
+                    if (deckList.Count > cardsQuantity[0])
                     {
                         break;
                     }
@@ -181,23 +146,16 @@ namespace FinalTask.Game.Games
                 if (playerScore <= 21 && (casinoScore > 21 || playerScore > casinoScore))
                 {
                     OnWinInvoke();
-
-                    //base.OnWin += PlayerWin;
-                    //summ = bank/2;
                     break;
                 }
                 else if (casinoScore <= 21 && (playerScore > 21 || playerScore < casinoScore))
                 {
                     OnLooseInvoke();
-                    //base.OnLoose += CasinoWin;
-                    //summ = -bank/2;
                     break;
                 }
-                else if ((playerScore >= 21 && casinoScore >= 21) /*|| ((playerScore == casinoScore) && playerScore > 15)*/)
+                else if (playerScore >= 21 && casinoScore >= 21)
                 {
                     OnDrawInvoke();
-                    //base.OnDraw += NoWinner;
-                    //summ = 0;
                     break;
                 }
                 else //a.	Количество очков одинаковое и меньше 21 - ещё по одной карте
@@ -207,46 +165,6 @@ namespace FinalTask.Game.Games
                     casinoHand.Enqueue(deck.Pop());
                 }
             } while (true);
-
-
-            //base.OnWin -= PlayerWin;
-            //base.OnLoose -= CasinoWin;
-            //base.OnDraw -= NoWinner;
-
-            //return summ;
-
-            //else if(playerScore == 21)
-            //{
-            //    Console.WriteLine(" *** There is no winner ***");
-            //    OnDrawInvoke();
-            //}
-            //else
-            //{
-            //    do
-            //    {
-            //        //реализовать раздачу карт, если у игроков одинаковое количество очков и не превышает 15 (так как если 16 + 6 (минимальное значение в колоде, то будет >21)
-            //    } while (true);
-            //}
-            //throw new NotImplementedException();
         }
-        //сделать нормальный вовд результата по событию
-
-
-
-        //public void PlayerWin(int param)
-        //{
-        //    Console.WriteLine(" *** Player win ***");
-        //    Console.WriteLine(" *** Player get bank: {0}$ ***", param);
-        //}
-        //public static void CasinoWin(int param)
-        //{
-        //    Console.WriteLine(" *** Casino win ***");
-        //    Console.WriteLine(" *** Player loose bet: {0}$ ***", param/2);
-        //}
-        //public static void NoWinner(int param)
-        //{
-        //    Console.WriteLine(" *** No winner ***");
-        //    Console.WriteLine(" *** Player return bet: {0}$ ***", param / 2);
-        //}
     }
 }

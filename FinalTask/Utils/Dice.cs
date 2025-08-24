@@ -14,9 +14,9 @@ namespace FinalTask.Utils
 
         public Dice(int min, int max)
         {
-            if (_min < 1 || _min > _max)
+            if (min < 1 || min > int.MaxValue)
             {
-                //throw new WrongDiceNumberException();
+                throw new WrongDiceNumberException($"Incorrect min value: {_min}");
             } 
             else
             {

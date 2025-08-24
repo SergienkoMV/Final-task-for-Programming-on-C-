@@ -7,7 +7,6 @@ namespace FinalTask.FileSystem
 {
     class FileSystemSaveLoadService : ISaveLoadService<String>
     {
-        //private int _money;
         private string _path;
 
         public FileSystemSaveLoadService(string path)
@@ -17,11 +16,23 @@ namespace FinalTask.FileSystem
 
         public void SaveData(string _money, string _player)
         {
-            var file = GeneratePath(_player);
-            using (StreamWriter writhStream = File.CreateText(file)) //как я понял, можно сделать без "(", ")" в таком случае память освободится, когда выйдем из метода
+            try
             {
-                writhStream.WriteLine(_money);
+                if (!string.IsNullOrEmpty(_path) && !Directory.Exists(_path))
+                {
+                    Directory.CreateDirectory(_path);
+                }
+                var file = GeneratePath(_player);
+                using (StreamWriter writhStream = File.CreateText(file))
+                {
+                    writhStream.WriteLine(_money);
+                }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+
         }
 
         public string LoadData(string fileName)
@@ -42,8 +53,6 @@ namespace FinalTask.FileSystem
                 SaveData(bank, fileName);
                 return bank;
             }
-
-            //return default(string);
         }
 
         private string GeneratePath(string fileName)

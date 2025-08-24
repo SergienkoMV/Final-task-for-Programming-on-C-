@@ -12,17 +12,13 @@ namespace FinalTask.Game
 
     abstract class CasinoGameBase
     {
-        //protected int _bet;
-        //protected int _bank;
-        //protected int _quantity;
+        public event Action OnWin;
+        public event Action OnLoose;
+        public event Action OnDraw;
 
-        public event Result OnWin;
-        public event Result OnLoose;
-        public event Result OnDraw;
-
-        public CasinoGameBase(int _quantity)
+        public CasinoGameBase(int[] values)
         {
-            FactoryMethod(_quantity);
+            FactoryMethod(values);
         }
 
         public abstract void PlayGame();
@@ -39,7 +35,7 @@ namespace FinalTask.Game
             }
         }
 
-        protected abstract void FactoryMethod(int _quantity);
+        protected abstract void FactoryMethod(int[] values);
 
         public abstract void ResultOutpu();
     }

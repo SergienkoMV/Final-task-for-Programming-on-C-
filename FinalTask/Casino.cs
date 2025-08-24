@@ -8,12 +8,10 @@ using FinalTask.Utils;
 
 namespace FinalTask
 {
-    public delegate void Result();
-    //public delegate int Result(int sum);
+    //public delegate void Result();
 
     class Casino : IGame
     {
-        public int MaxBank = 10000;
         private string _player;
         private int _playerMoney = 0;
         private int _gameNumber = 1;
@@ -28,8 +26,8 @@ namespace FinalTask
 
         public Casino()
         {
-            _blackJeck = new BlackJeck(54);
-            _dice = new DiceGame(5, 1, 6);
+            _blackJeck = new BlackJeck(new int[] { 54 });
+            _dice = new DiceGame(new int[] { 5, 1, 6 });
         }
 
         public void StartGame()
@@ -61,26 +59,15 @@ namespace FinalTask
                     {
                         _bank = MakeBet();
                         currentGame.PlayGame();
-                        currentGame.OnWin += () =>
-                        {
-                            Console.WriteLine(" *** Player win ***");
-                            Console.WriteLine(" *** Player get bank: {0}$ ***", _bank);
-                            _playerMoney += _bank / 2;
-                        };
-                        currentGame.OnLoose += () =>
-                        {
-                            Console.WriteLine(" *** Casino win ***");
-                            Console.WriteLine(" *** Player loose bet: {0}$ ***", _bank / 2);
-                            _playerMoney -= _bank / 2;
-                        };
-                        currentGame.OnDraw += () =>
-                        {
-                            Console.WriteLine(" *** No winner ***");
-                            Console.WriteLine(" *** Player return bet: {0}$ ***", _bank / 2);
-                        };
+                        currentGame.OnWin += OnWinOutput;
+                        currentGame.OnLoose += OnLooseOutput;
+                        currentGame.OnDraw += OnDrawOutput;
                         //5.Далее выводится результат игры: значение карт либо костей(в зависимости от выбранной игры), победа / поражение или ничья.
                         currentGame.ResultOutpu();
                         Console.WriteLine("You have {0}$", _playerMoney);
+                        currentGame.OnWin -= OnWinOutput;
+                        currentGame.OnLoose -= OnLooseOutput;
+                        currentGame.OnDraw -= OnDrawOutput;
                     }
                 }
             } while (_gameNumber != 0 && _playerMoney > 0);
@@ -106,13 +93,6 @@ namespace FinalTask
 
         //если методы создаются только для того, чтобы структурировать программу и сделать более читаемой, нет же смысла передавать в методы и возвращать переменные, которые используются внутри данного класса?
 
-        //private void /*Dictionary<string, int>*/ LoadProfile(string nmae)
-        //{
-        //    //return _profile;
-        //    _profile.TryGetValue(_player, out int value);
-        //    Console.WriteLine("Your bank is: " + _profile[_player] /*value*/);
-        //}
-
         private int ChooseTheGame()
         {
             do
@@ -132,17 +112,9 @@ namespace FinalTask
                     switch (_gameNumber)
                     {
                         case 1:
-                            //if (!CheckMoney())
-                            //{
-                            //    break;
-                            //}
                             currentGame = _blackJeck;
                             break;
                         case 2:
-                            //if (!CheckMoney())
-                            //{
-                            //    break;
-                            //}
                             currentGame = _dice;
                             break;
                         case 0:
@@ -209,6 +181,25 @@ namespace FinalTask
                 _playerMoney = _playerMoney / 2;
             }
             return true;
+        }
+
+        public void OnWinOutput()
+        {
+            Console.WriteLine(" *** Player win ***");
+            Console.WriteLine(" *** Player get bank: {0}$ ***", _bank);
+            _playerMoney += _bank / 2; 
+        }
+
+        public void OnLooseOutput()
+        {
+            Console.WriteLine(" *** Casino win ***");
+            Console.WriteLine(" *** Player loose bet: {0}$ ***", _bank / 2);
+            _playerMoney -= _bank / 2;
+        }
+        public void OnDrawOutput()
+        {
+            Console.WriteLine(" *** No winner ***");
+            Console.WriteLine(" *** Player return bet: {0}$ ***", _bank / 2);
         }
     }
 }
