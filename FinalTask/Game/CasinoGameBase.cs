@@ -7,36 +7,50 @@ using System.Threading.Tasks;
 
 namespace FinalTask.Game
 {
+    //должно ли это быть здесь / только здесь?
+    public delegate void Result(int sum);
+
     abstract class CasinoGameBase
     {
         //protected int _bet;
         //protected int _bank;
         //protected int _quantity;
 
-        public CasinoGameBase(int _quantity)
+        public event Result OnWin;
+        public event Result OnLoose;
+        public event Result OnDraw;
+
+        public CasinoGameBase(int[] values)
         {
-            FactoryMethod(_quantity);
+            FactoryMethod(values);
         }
 
         public abstract void PlayGame();
 
-        protected void OnWinInvoke() 
+        protected void OnWinInvoke(int param) 
         {
-            //вызывает событие OnWin (создеть в этом классе)
+            if (OnWin != null)
+            {
+                OnWin.Invoke(param);
+            } 
         }
-        protected void OnLooseInvoke()
+        protected virtual void OnLooseInvoke(int param)
         {
-            //вызывает событие OnLoose (создеть в этом классе)
+            if (OnLoose != null)
+            {
+                OnLoose.Invoke(param);
+            }
         }
-        protected void OnDrawInvoke()
+        protected virtual void OnDrawInvoke(int param)
         {
-            //вызывает событие OnDraw (создеть в этом классе)
+            if (OnDraw != null)
+            {
+                OnDraw.Invoke(param);
+            }
         }
 
-        protected abstract void FactoryMethod(int _quantity);
+        protected abstract void FactoryMethod(int[] values);
 
-
-
-        public abstract void ResultOutpu();
+        public abstract int ResultOutpu(int bank);
     }
 }

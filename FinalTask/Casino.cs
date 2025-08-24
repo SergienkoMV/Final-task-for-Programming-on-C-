@@ -10,24 +10,25 @@ namespace FinalTask
 {
     class Casino : IGame
     {
-        //public const string StartBank = "1000";
         public int MaxBank = 10000;
         private string _player;
         private int _playerMoney = 0;
-        //private Dictionary<string, int> _profile;
         private int _gameNumber = 1;
+        private int _bank;
         private bool correctInput;
         private string _path = "G:\\Учеба\\GameDev\\Курс Разработчик Unity3d Netologia\\Итоговая работа по C#\\Итоговая работа по программированию\\FinalTask\\Profiles\\";
-        private BlackJeck blackJeck;
-        private Dice dice;
+        private BlackJeck _blackJeck;
+        private DiceGame _dice;
         private CasinoGameBase currentGame;
 
         public int Money => _playerMoney;
 
         public Casino()
         {
-            blackJeck = new BlackJeck(54);
-            //dice = new Dice();
+            int[] blackJeckParams = new int[] { 54 };
+            _blackJeck = new BlackJeck(blackJeckParams);
+            int[] diceParams = new int[] { 5, 1, 6 };
+            _dice = new DiceGame(diceParams);
         }
 
         public void StartGame()
@@ -41,7 +42,7 @@ namespace FinalTask
             //2. Загрузка профиля игрока. Если профиля нет - создать. Предложить игроку ввести имя.
             if (int.TryParse(fileManager.LoadData(_player), out int money))
             {
-                Console.WriteLine("Your bank is: " + money);
+                Console.WriteLine("Your bank is: " + money + "$");
                 _playerMoney = money;
             } 
             else
@@ -50,23 +51,24 @@ namespace FinalTask
             }
 
             //3. Выбор игры
-            while (_gameNumber != 0/* && _playerMoney > 0*/)
+            do
             {
-                ChooseTheGame();
-                if (CheckMoney()) 
+                if (CheckMoney())
                 {
-                    if (MakeBet() > 0)
+                    _gameNumber = ChooseTheGame();
+                    if (_gameNumber != 0)
                     {
+                        _bank = MakeBet();
                         currentGame.PlayGame();
-                        currentGame.ResultOutpu();
+                        //5.Далее выводится результат игры: значение карт либо костей(в зависимости от выбранной игры), победа / поражение или ничья.
+                        _playerMoney += currentGame.ResultOutpu(_bank);
+                        Console.WriteLine("You have {0}$", _playerMoney);
                     }
-                    
-                    //5.Далее выводится результат игры: значение карт либо костей(в зависимости от выбранной игры), победа / поражение или ничья.
                 }
-            } 
+            } while (_gameNumber != 0 && _playerMoney > 0);
 
-            //6.Прощаемся с игроком.
-            Console.WriteLine("Goodbye, {0}", _player);
+                //6.Прощаемся с игроком.
+                Console.WriteLine("Goodbye, {0}", _player);
             //7.Сохраняем профиль.
             fileManager.SaveData(_playerMoney.ToString(), _player);
             //8.Выход из игры.
@@ -93,7 +95,7 @@ namespace FinalTask
         //    Console.WriteLine("Your bank is: " + _profile[_player] /*value*/);
         //}
 
-        private void ChooseTheGame()
+        private int ChooseTheGame()
         {
             do
             {
@@ -116,25 +118,25 @@ namespace FinalTask
                             //{
                             //    break;
                             //}
-                            currentGame = blackJeck;
+                            currentGame = _blackJeck;
                             break;
                         case 2:
                             //if (!CheckMoney())
                             //{
                             //    break;
                             //}
-                            currentGame = dice;
+                            currentGame = _dice;
                             break;
                         case 0:
-
                             break;
                         default:
-                            Console.WriteLine("There are not this game in our casino.");
+                            Console.WriteLine("There is not this game in our casino.");
                             correctInput = false;
                             break;
                     } 
                 }
             } while (!correctInput);
+            return _gameNumber;
         }
 
         public int MakeBet()
@@ -149,7 +151,12 @@ namespace FinalTask
                     if (playerBet > _playerMoney)
                     {
                         Console.WriteLine("You haven't so money. Please use that you have");
-                        return 0;
+                        correctInput = false;
+                    }
+                    else if(playerBet == 0)
+                    {
+                        Console.WriteLine("You should make bet. You can not play without bet.");
+                        correctInput = false;
                     }
                     else
                     {
@@ -158,15 +165,16 @@ namespace FinalTask
                         //Значение ставки компьютера равняется ставке игрока. 
                         bank = playerBet * 2;
                         //Объявляем сумму банка
-                        Console.WriteLine("Player's bet is {0}. Casino's bet is {0}. Bank is {1}", playerBet, bank);
-                        break;
+                        Console.WriteLine("Player's bet is {0}$. Casino's bet is {0}$. There is {1}$ in the bank", playerBet, bank);
+                        correctInput = true;
                     }
                 }
                 else
                 {
                     Console.WriteLine("Incorrect input, please make bet by money");
+                    correctInput = false;
                 }
-            } while (false);
+            } while (!correctInput);
             return bank;
         }
 
