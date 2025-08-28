@@ -4,9 +4,9 @@ namespace FinalTask.Game
 {
     abstract class CasinoGameBase
     {
-        public event Action OnWin;
-        public event Action OnLoose;
-        public event Action OnDraw;
+        public abstract event Action OnWin;
+        public abstract event Action OnLoose;
+        public abstract event Action OnDraw;
 
         public CasinoGameBase()
         {
@@ -15,11 +15,11 @@ namespace FinalTask.Game
 
         public abstract void PlayGame();
 
-        protected virtual void OnWinInvoke() => OnWin?.Invoke();
+        //protected virtual void OnWinInvoke() => OnWin?.Invoke();
 
-        protected virtual void OnLooseInvoke() => OnLoose?.Invoke();
+        //protected virtual void OnLooseInvoke() => OnLoose?.Invoke();
 
-        protected virtual void OnDrawInvoke() => OnDraw.Invoke();
+        //protected virtual void OnDrawInvoke() => OnDraw.Invoke();
         //{
         //    if (OnDraw != null)
         //    {

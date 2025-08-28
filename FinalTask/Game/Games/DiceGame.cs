@@ -5,6 +5,10 @@ namespace FinalTask.Game.Games
 {
     class DiceGame : CasinoGameBase
     {
+        public override event Action OnWin;
+        public override event Action OnLoose;
+        public override event Action OnDraw;
+
         private int _diceQuantity;
         private int _maxValue;
         private int _minValue;
@@ -74,15 +78,18 @@ namespace FinalTask.Game.Games
 
             if (playerScore > casinoScore)
             {
-                OnWinInvoke();
+                OnWin?.Invoke();
+                //OnWinInvoke();
             }
             else if (playerScore < casinoScore)
             {
-                OnLooseInvoke();
+                OnLoose?.Invoke();
+                //OnLooseInvoke();
             }
             else
             {
-                OnDrawInvoke();
+                OnDraw?.Invoke();
+                //OnDrawInvoke();
             }
         }
     }

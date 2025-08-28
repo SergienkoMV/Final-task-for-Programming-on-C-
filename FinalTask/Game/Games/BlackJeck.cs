@@ -6,10 +6,10 @@ namespace FinalTask.Game.Games
 {
     class BlackJeck : CasinoGameBase
     {
-        //public event Action OnWin;
-        //public event Action OnLoose;
-        //public event Action OnDraw;
-        
+        public override event Action OnWin;
+        public override event Action OnLoose;
+        public override event Action OnDraw;
+
         int playerScore = 0;
         int casinoScore = 0;
         private string playerName = "Player";
@@ -104,7 +104,6 @@ namespace FinalTask.Game.Games
 
         public override void ResultOutpu()
         {
-            int summ = 0;
             playerScore = 0;
             casinoScore = 0;
 
@@ -129,17 +128,20 @@ namespace FinalTask.Game.Games
 
                 if (playerScore <= 21 && (casinoScore > 21 || playerScore > casinoScore))
                 {
-                    OnWinInvoke();
+                    OnWin?.Invoke();
+                    //OnWinInvoke();
                     break;
                 }
                 else if (casinoScore <= 21 && (playerScore > 21 || playerScore < casinoScore))
                 {
-                    OnLooseInvoke();
+                    OnLoose?.Invoke();
+                    //OnLooseInvoke();
                     break;
                 }
                 else if (playerScore >= 21 && casinoScore >= 21)
                 {
-                    OnDrawInvoke();
+                    OnDraw?.Invoke();
+                    //OnDrawInvoke();
                     break;
                 }
                 else
