@@ -5,6 +5,7 @@ namespace FinalTask.Game.Games
 {
     class DiceGame : CasinoGameBase
     {
+        private int _diceQuantity;
         private int _maxValue;
         private int _minValue;
         public int MaxValue => _maxValue;
@@ -13,23 +14,25 @@ namespace FinalTask.Game.Games
         int[] PlayerResult;
         int[] CasinoResult;
 
-        public DiceGame(int[] values) : base(values)
+        public DiceGame(int diceQuantity, int minValue, int maxValue)
         {
-
+            _diceQuantity = diceQuantity;
+            _minValue = minValue;
+            _maxValue = maxValue;
+            FactoryMethod();
         }
 
-        protected override void FactoryMethod(int[] values)
+        protected override void FactoryMethod()
         {
-            dices = new Dice[values[0]];
+            dices = new Dice[_diceQuantity];
             for (int i = 0; i < dices.Length; i++)
             {
                 try
                 {
-                    dices[i] = new Dice(values[1], values[2]);
+                    dices[i] = new Dice(_minValue, _maxValue);
                 }
-                catch (WrongDiceNumberException ex)
+                finally
                 {
-                    Console.WriteLine($"Error: {ex.Message}");
                 }
             }
         }

@@ -8,9 +8,9 @@ namespace FinalTask.Game
         public event Action OnLoose;
         public event Action OnDraw;
 
-        public CasinoGameBase(int[] values)
+        public CasinoGameBase()
         {
-            FactoryMethod(values);
+            //FactoryMethod(values);
         }
 
         public abstract void PlayGame();
@@ -19,15 +19,15 @@ namespace FinalTask.Game
 
         protected virtual void OnLooseInvoke() => OnLoose?.Invoke();
 
-        protected virtual void OnDrawInvoke()
-        {
-            if (OnDraw != null)
-            {
-                OnDraw.Invoke();
-            }
-        }
+        protected virtual void OnDrawInvoke() => OnDraw.Invoke();
+        //{
+        //    if (OnDraw != null)
+        //    {
+        //        OnDraw.Invoke();
+        //    }
+        //}
 
-        protected abstract void FactoryMethod(int[] values);
+        protected abstract void FactoryMethod();
 
         public abstract void ResultOutpu();
     }

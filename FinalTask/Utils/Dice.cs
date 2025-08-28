@@ -7,7 +7,7 @@ using FinalTask.Utils;
 
 namespace FinalTask.Utils
 {
-    class Dice
+    struct Dice
     {
         private int _min;
         private int _max;
@@ -16,7 +16,7 @@ namespace FinalTask.Utils
         {
             if (min < 1 || min > int.MaxValue)
             {
-                throw new WrongDiceNumberException($"Incorrect min value: {_min}");
+                throw new WrongDiceNumberException($"Incorrect min value:", min);
             } 
             else
             {

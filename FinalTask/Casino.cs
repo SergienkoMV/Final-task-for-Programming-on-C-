@@ -10,22 +10,26 @@ namespace FinalTask
 {
     class Casino : IGame
     {
-        private string _player;
+        private int _cardsQuantity = 54;
+        private int _diceQuantity = 5;
+        private int _diceMinValue = 1;
+        private int _diceMaxValue = 6;
         private int _playerMoney = 0;
         private int _gameNumber = 1;
         private int _bank;
-        private bool correctInput;
+        private bool _correctInput;
+        private string _player;
         private string _path = "G:\\Учеба\\GameDev\\Курс Разработчик Unity3d Netologia\\Итоговая работа по C#\\Итоговая работа по программированию\\FinalTask\\Profiles\\";
         private BlackJeck _blackJeck;
         private DiceGame _dice;
-        private CasinoGameBase currentGame;
+        private CasinoGameBase _currentGame;
 
         public int Money => _playerMoney;
 
         public Casino()
         {
-            _blackJeck = new BlackJeck(new int[] { 54 });
-            _dice = new DiceGame(new int[] { 5, 1, 6 });
+            _blackJeck = new BlackJeck(_cardsQuantity);
+            _dice = new DiceGame(_diceQuantity, _diceMinValue, _diceMaxValue);
         }
 
         public void StartGame()
@@ -52,14 +56,14 @@ namespace FinalTask
                     if (_gameNumber != 0)
                     {
                         _bank = MakeBet();
-                        currentGame.PlayGame();
-                        currentGame.OnWin += OnWinOutput;
-                        currentGame.OnLoose += OnLooseOutput;
-                        currentGame.OnDraw += OnDrawOutput;
-                        currentGame.ResultOutpu();
-                        currentGame.OnWin -= OnWinOutput;
-                        currentGame.OnLoose -= OnLooseOutput;
-                        currentGame.OnDraw -= OnDrawOutput;
+                        _currentGame.PlayGame();
+                        _currentGame.OnWin += OnWinOutput;
+                        _currentGame.OnLoose += OnLooseOutput;
+                        _currentGame.OnDraw += OnDrawOutput;
+                        _currentGame.ResultOutpu();
+                        _currentGame.OnWin -= OnWinOutput;
+                        _currentGame.OnLoose -= OnLooseOutput;
+                        _currentGame.OnDraw -= OnDrawOutput;
                     }
                 }
                 else
@@ -92,28 +96,28 @@ namespace FinalTask
                 if (!Int32.TryParse(Console.ReadLine(), out _gameNumber)) //добавить проверку, что выбранное значение есть в enum
                 {
                     Console.WriteLine("Incorrect input");
-                    correctInput = false;
+                    _correctInput = false;
                 } 
                 else
                 {
-                    correctInput = true;
+                    _correctInput = true;
                     switch (_gameNumber)
                     {
                         case 1:
-                            currentGame = _blackJeck;
+                            _currentGame = _blackJeck;
                             break;
                         case 2:
-                            currentGame = _dice;
+                            _currentGame = _dice;
                             break;
                         case 0:
                             break;
                         default:
                             Console.WriteLine("There is not this game in our casino.");
-                            correctInput = false;
+                            _correctInput = false;
                             break;
                     } 
                 }
-            } while (!correctInput);
+            } while (!_correctInput);
             return _gameNumber;
         }
 
@@ -129,26 +133,26 @@ namespace FinalTask
                     if (playerBet > _playerMoney)
                     {
                         Console.WriteLine("You haven't so money. Please use that you have");
-                        correctInput = false;
+                        _correctInput = false;
                     }
                     else if(playerBet == 0)
                     {
                         Console.WriteLine("You should make bet. You can not play without bet.");
-                        correctInput = false;
+                        _correctInput = false;
                     }
                     else
                     {
                         bank = playerBet * 2;
                         Console.WriteLine("Player's bet is {0}$. Casino's bet is {0}$. There is {1}$ in the bank", playerBet, bank);
-                        correctInput = true;
+                        _correctInput = true;
                     }
                 }
                 else
                 {
                     Console.WriteLine("Incorrect input, please make bet by money");
-                    correctInput = false;
+                    _correctInput = false;
                 }
-            } while (!correctInput);
+            } while (!_correctInput);
             return bank;
         }
 

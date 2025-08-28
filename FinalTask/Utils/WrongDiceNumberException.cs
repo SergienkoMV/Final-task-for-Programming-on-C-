@@ -4,9 +4,11 @@ namespace FinalTask.Utils
 {
     class WrongDiceNumberException : Exception
     {
-        public WrongDiceNumberException(string message) : base(message) 
-        { 
+        public int Value { get; }
 
+        public WrongDiceNumberException(string message, int val) : base(message) 
+        {
+            Value = val;
         }
     }
 }
